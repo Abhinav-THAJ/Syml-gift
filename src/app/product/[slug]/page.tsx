@@ -42,7 +42,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-32">
+    <div className="min-h-screen bg-background pb-32" style={{ paddingTop: '120px' }}>
       <div className="container mx-auto px-4 max-w-7xl">
         
         {/* Breadcrumb */}

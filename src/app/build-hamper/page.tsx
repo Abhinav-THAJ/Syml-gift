@@ -23,7 +23,7 @@ export default function BuildHamperPage() {
   const [selectedBox, setSelectedBox] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-20">
+    <div className="min-h-screen bg-background pb-20" style={{ paddingTop: '120px' }}>
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12 space-y-4">

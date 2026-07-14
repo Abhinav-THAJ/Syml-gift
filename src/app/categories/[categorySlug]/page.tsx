@@ -23,7 +23,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categorySlu
     .join(' ');
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-20">
+    <div className="min-h-screen bg-background pb-20" style={{ paddingTop: '120px' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-12 space-y-6">
