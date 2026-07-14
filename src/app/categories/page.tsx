@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Filter, SlidersHorizontal, Heart, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 

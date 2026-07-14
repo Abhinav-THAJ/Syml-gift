@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
@@ -9,9 +10,15 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-6">
             <Link href="/" className="inline-block">
-              <span className="font-heading text-2xl font-bold tracking-tighter text-primary">
-                SMYL GIFTING
-              </span>
+              <div className="relative w-56 h-20">
+                <Image 
+                  src="/photos/IMG_8385.PNG" 
+                  alt="SMYL GIFTING" 
+                  fill 
+                  className="object-contain object-left" 
+                  unoptimized
+                />
+              </div>
             </Link>
             <p className="text-muted-foreground leading-relaxed italic font-serif">
               "Something You Love for Someone You Love"

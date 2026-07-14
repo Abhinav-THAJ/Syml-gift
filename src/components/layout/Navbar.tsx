@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, Heart, ShoppingBag, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -24,9 +25,16 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-8">
         <Link href="/" className="flex-shrink-0">
-          <span className="font-heading text-2xl font-bold tracking-tighter text-primary">
-            SMYL GIFTING
-          </span>
+          <div className="relative w-48 h-16">
+            <Image 
+              src="/photos/IMG_8385.PNG" 
+              alt="SMYL GIFTING" 
+              fill 
+              className="object-contain object-left" 
+              unoptimized
+              priority 
+            />
+          </div>
         </Link>
 
         {/* Search Bar - Pinterest Style */}
