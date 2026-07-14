@@ -11,7 +11,7 @@ export default function CorporatePage() {
           <div className="space-y-6">
             <span className="text-primary font-medium tracking-widest uppercase text-sm">Corporate Gifting</span>
             <h1 className="text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight">
-              Elevate Your <br/><span className="text-primary italic font-serif">Corporate Relations</span>
+              Elevate Your <br/><span className="text-primary italic font-heading">Corporate Relations</span>
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
               Impress clients, reward employees, and celebrate milestones with our luxury, bespoke corporate hampers. We handle everything from curation to doorstep delivery.

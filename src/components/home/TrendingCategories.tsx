@@ -2,54 +2,59 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const categories = [
-  { title: 'Birthday Hampers', image: '/photos/3.jpeg', colSpan: 'md:col-span-2 md:row-span-2', href: '/categories/birthday' },
-  { title: 'Corporate Hampers', image: '/photos/4.jpeg', colSpan: 'col-span-1 row-span-1', href: '/categories/corporate' },
-  { title: 'Festive Hampers', image: '/photos/5.jpeg', colSpan: 'col-span-1 row-span-1', href: '/categories/festive' },
-  { title: 'Anniversary Hampers', image: '/photos/6.jpeg', colSpan: 'md:col-span-2 row-span-1', href: '/categories/anniversary' },
-  { title: 'Budget Hampers', image: '/photos/7.jpeg', colSpan: 'col-span-1 row-span-1', href: '/categories/budget' },
-  { title: 'No Reason Hampers', image: '/photos/9.jpeg', colSpan: 'col-span-1 row-span-1', href: '/categories/no-reason' },
+  { title: 'Budget Hampers', image: '/photos/7.jpeg', href: '/categories/budget-hampers' },
+  { title: 'Cute Valentines Gifts', image: '/photos/1.jpeg', href: '/categories/valentines-day-hampers' },
+  { title: 'Birthday Hamper', image: '/photos/3.jpeg', href: '/categories/birthday-hampers' },
+  { title: 'Anniversary Hampers', image: '/photos/6.jpeg', href: '/categories/anniversary-hampers' },
+  { title: 'Valentines Hampers', image: '/photos/9.jpeg', href: '/categories/valentines-day-hampers' },
+  { title: 'Photo Frames', image: '/photos/4.jpeg', href: '/categories/photo-frames' },
 ];
 
 export default function TrendingCategories() {
   return (
-    <section className="py-24 bg-background">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-heading font-bold text-foreground">
-            Trending Categories
+        <div className="flex items-center gap-3 mb-10">
+          <h2 className="text-2xl font-heading font-semibold text-foreground">
+            Shop by Collection
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore our most loved collections curated to bring joy to every special moment.
-          </p>
+          <Link
+            href="/categories"
+            className="ml-auto flex items-center gap-1 text-sm font-medium text-primary hover:underline underline-offset-4"
+          >
+            View all <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[250px] gap-6">
-          {categories.map((category, index) => (
+        {/* Horizontal scrollable row of circles */}
+        <div className="flex justify-between gap-4 overflow-x-auto pb-4 scrollbar-hide">
+          {categories.map((cat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`group relative rounded-[2rem] overflow-hidden ${category.colSpan}`}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className="flex-1 min-w-[110px] max-w-[160px] flex flex-col items-center gap-3 group cursor-pointer"
             >
-              <Link href={category.href} className="block w-full h-full">
-                <Image
-                  src={category.image}
-                  alt={category.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
-                <div className="absolute bottom-0 left-0 p-8 w-full">
-                  <h3 className="text-2xl font-heading font-semibold text-white mb-2 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    {category.title}
-                  </h3>
-                  <div className="w-10 h-1 bg-primary transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
+              <Link href={cat.href} className="block">
+                {/* Circle image */}
+                <div className="relative w-[110px] h-[110px] md:w-[130px] md:h-[130px] mx-auto rounded-full overflow-hidden border-2 border-border group-hover:border-primary/50 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
                 </div>
+                {/* Label */}
+                <p className="mt-3 text-sm font-medium text-foreground text-center leading-tight group-hover:text-primary transition-colors">
+                  {cat.title} →
+                </p>
               </Link>
             </motion.div>
           ))}
