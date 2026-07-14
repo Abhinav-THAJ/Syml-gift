@@ -45,7 +45,7 @@ export default function Preloader() {
             initial={{ scaleY: 1 }}
             exit={{ scaleY: 0 }}
             transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
-            style={{ originY: 0, backgroundColor: '#910f3f' }}
+            style={{ originY: 0, backgroundColor: '#be185d' }}
             className="absolute top-0 left-0 right-0 h-1"
           />
 
@@ -66,18 +66,18 @@ export default function Preloader() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 {/* Box body */}
-                <rect x="8" y="32" width="56" height="34" rx="3" fill="#910f3f" />
+                <rect x="8" y="32" width="56" height="34" rx="3" fill="#be185d" />
                 {/* Box lid */}
-                <rect x="5" y="20" width="62" height="14" rx="3" fill="#7a0d35" />
+                <rect x="5" y="20" width="62" height="14" rx="3" fill="#9d174d" />
                 {/* Vertical ribbon */}
-                <rect x="32" y="20" width="8" height="46" fill="#f2efdd" opacity="0.35" />
+                <rect x="32" y="20" width="8" height="46" fill="#fdf2f8" opacity="0.35" />
                 {/* Horizontal ribbon */}
-                <rect x="5" y="27" width="62" height="8" fill="#f2efdd" opacity="0.35" />
+                <rect x="5" y="27" width="62" height="8" fill="#fdf2f8" opacity="0.35" />
 
                 {/* Bow left loop */}
                 <motion.path
                   d="M36 20 C28 8, 12 8, 16 18 C20 24, 32 22, 36 20Z"
-                  fill="#f9e547"
+                  fill="#bae6fd"
                   animate={{ rotate: [0, -8, 0, 8, 0] }}
                   transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
                   style={{ transformOrigin: '36px 20px' }}
@@ -85,20 +85,20 @@ export default function Preloader() {
                 {/* Bow right loop */}
                 <motion.path
                   d="M36 20 C44 8, 60 8, 56 18 C52 24, 40 22, 36 20Z"
-                  fill="#f9e547"
+                  fill="#bae6fd"
                   animate={{ rotate: [0, 8, 0, -8, 0] }}
                   transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
                   style={{ transformOrigin: '36px 20px' }}
                 />
                 {/* Bow center knot */}
-                <circle cx="36" cy="20" r="5" fill="#f9c30a" />
+                <circle cx="36" cy="20" r="5" fill="#38bdf8" />
 
                 {/* Sparkles */}
                 <motion.circle
                   cx="58"
                   cy="14"
                   r="2.5"
-                  fill="#f9e547"
+                  fill="#bae6fd"
                   animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
                   transition={{ repeat: Infinity, duration: 1.6, delay: 0.2 }}
                 />
@@ -106,7 +106,7 @@ export default function Preloader() {
                   cx="14"
                   cy="10"
                   r="2"
-                  fill="#f9e547"
+                  fill="#bae6fd"
                   animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
                   transition={{ repeat: Infinity, duration: 1.8, delay: 0.6 }}
                 />
@@ -114,7 +114,7 @@ export default function Preloader() {
                   cx="62"
                   cy="38"
                   r="1.5"
-                  fill="#f2efdd"
+                  fill="#fdf2f8"
                   animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
                   transition={{ repeat: Infinity, duration: 1.4, delay: 0.9 }}
                 />
@@ -130,13 +130,13 @@ export default function Preloader() {
             >
               <p
                 className="text-3xl font-heading font-semibold tracking-tight"
-                style={{ color: '#3d081b' }}
+                style={{ color: '#831843' }}
               >
                 SMYL Gifting
               </p>
               <p
                 className="text-sm font-sans tracking-[0.22em] mt-1 uppercase"
-                style={{ color: '#7a3a50' }}
+                style={{ color: '#9d174d' }}
               >
                 Something You Love
               </p>
@@ -148,12 +148,12 @@ export default function Preloader() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
               className="w-48 h-[2px] rounded-full overflow-hidden"
-              style={{ backgroundColor: '#dcd7c0' }}
+              style={{ backgroundColor: '#f9a8d4' }}
             >
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  backgroundColor: '#910f3f',
+                  backgroundColor: '#be185d',
                   width: `${Math.min(progress, 100)}%`,
                   transition: 'width 0.15s ease-out',
                 }}
@@ -164,19 +164,19 @@ export default function Preloader() {
           {/* Decorative corner dots */}
           <div
             className="absolute top-6 left-6 w-2 h-2 rounded-full"
-            style={{ backgroundColor: '#910f3f', opacity: 0.3 }}
+            style={{ backgroundColor: '#be185d', opacity: 0.3 }}
           />
           <div
             className="absolute top-6 right-6 w-2 h-2 rounded-full"
-            style={{ backgroundColor: '#910f3f', opacity: 0.3 }}
+            style={{ backgroundColor: '#be185d', opacity: 0.3 }}
           />
           <div
             className="absolute bottom-6 left-6 w-2 h-2 rounded-full"
-            style={{ backgroundColor: '#910f3f', opacity: 0.3 }}
+            style={{ backgroundColor: '#be185d', opacity: 0.3 }}
           />
           <div
             className="absolute bottom-6 right-6 w-2 h-2 rounded-full"
-            style={{ backgroundColor: '#910f3f', opacity: 0.3 }}
+            style={{ backgroundColor: '#be185d', opacity: 0.3 }}
           />
         </motion.div>
       )}
