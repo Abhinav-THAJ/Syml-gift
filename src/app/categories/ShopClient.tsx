@@ -151,7 +151,7 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
           <div className="w-full lg:w-[280px] flex-shrink-0">
             <div className="sticky top-28 bg-card border border-border/50 shadow-sm rounded-2xl p-6">
               <h3 className="text-lg font-bold text-foreground mb-4 pb-4 border-b border-border/50">Categories</h3>
-              <ul className="space-y-3 max-h-[65vh] overflow-y-auto scrollbar-hide pr-2">
+              <ul className="space-y-3 max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
                 <li>
                   <button
                     onClick={() => setActiveCategory('All')}

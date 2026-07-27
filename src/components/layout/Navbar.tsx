@@ -55,7 +55,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
                       <div className="bg-background/98 backdrop-blur-3xl border border-border/50 shadow-2xl rounded-2xl flex min-h-[380px] overflow-hidden">
                         {/* Left Pane: Main Categories */}
                         <div className="w-1/3 bg-muted/30 p-4 border-r border-border/50">
-                          <ul className="space-y-1 max-h-[60vh] overflow-y-auto scrollbar-hide">
+                          <ul className="space-y-1 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
                             {categories.map((parent) => (
                               <li key={parent.id}>
                                 <Link 
@@ -90,7 +90,7 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
                                 </h3>
                                 
                                 {displayCat.children && displayCat.children.length > 0 ? (
-                                  <div className="columns-2 gap-6 space-y-4">
+                                  <div className="columns-2 gap-6 space-y-4 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2 pb-2">
                                     {displayCat.children.map((child: any) => (
                                       <div key={child.id} className="break-inside-avoid pb-1">
                                         <Link 
