@@ -30,7 +30,7 @@ export default async function Home() {
     <>
       <Hero />
       <FestivalSection />
-      <FeaturedCollections products={featuredProducts.slice(0, 4)} />
+      <FeaturedCollections products={featuredProducts} />
       <Features />
       <FAQSection />
       <Testimonials />

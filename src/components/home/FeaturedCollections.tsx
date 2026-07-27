@@ -38,15 +38,15 @@ export default function FeaturedCollections({ products = [] }: { products?: Feat
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.slice(0, 4).map((product, index) => (
+        <div className="flex overflow-x-auto gap-4 md:gap-6 pb-6 snap-x custom-scrollbar">
+          {products.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="group"
+              transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.5) }}
+              className="group min-w-[240px] md:min-w-[280px] lg:min-w-[300px] flex-shrink-0 snap-start"
             >
               <Link href={`/product/${product.slug || product.id}`}>
                 {/* Image container */}
