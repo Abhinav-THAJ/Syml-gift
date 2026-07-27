@@ -7,12 +7,14 @@ export default async function ShopPage() {
     getProducts('per_page=100'),
   ]);
   
-  const fetchedCategories = wcCategories
-    .filter((c: any) => c.slug !== 'uncategorized' && c.name.toLowerCase() !== 'uncategorized')
-    .map((c: any) => c.name);
-  
-  const hasOnam = fetchedCategories.some((c: string) => c.toLowerCase().includes('onam'));
-  const categories = ['All', ...(hasOnam ? [] : ['Onam Hampers']), ...fetchedCategories];
+  // Build category tree
+  const categoryTree = wcCategories.reduce((acc: any[], cat: any) => {
+    if (cat.slug === 'uncategorized') return acc;
+    if (cat.parent === 0) {
+      acc.push({ ...cat, children: wcCategories.filter((c: any) => c.parent === cat.id && c.slug !== 'uncategorized') });
+    }
+    return acc;
+  }, []);
   
   const products = wcProducts.map((p: any) => {
     const validCats = p.categories?.filter((c: any) => c.slug !== 'uncategorized' && c.name.toLowerCase() !== 'uncategorized') || [];
@@ -30,5 +32,5 @@ export default async function ShopPage() {
     };
   });
 
-  return <ShopClient categories={categories} initialProducts={products} />;
+  return <ShopClient categories={categoryTree} initialProducts={products} />;
 }

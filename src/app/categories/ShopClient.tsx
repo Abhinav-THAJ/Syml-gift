@@ -7,14 +7,26 @@ import Link from 'next/link';
 import { Filter, SlidersHorizontal, Heart, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function ShopClientContent({ categories: initialCategories, initialProducts }: { categories: string[], initialProducts: any[] }) {
+function ShopClientContent({ categories: initialCategories, initialProducts }: { categories: any[], initialProducts: any[] }) {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category') || searchParams.get('cat');
 
-  const categoriesList = initialCategories || ['All'];
+  const categoriesTree = initialCategories || [];
+  
+  const extractAllCategoryNames = (tree: any[]) => {
+    let names = ['All'];
+    tree.forEach(cat => {
+      names.push(cat.name);
+      if (cat.children) {
+        cat.children.forEach((child: any) => names.push(child.name));
+      }
+    });
+    return names;
+  };
+  
   const productList = initialProducts || [];
 
-  const filteredCategories = categoriesList.filter(c => c.toLowerCase() !== 'uncategorized');
+  const filteredCategories = extractAllCategoryNames(categoriesTree).filter(c => c.toLowerCase() !== 'uncategorized');
 
   const isCategoryMatch = (c1?: string, c2?: string) => {
     if (!c1 || !c2) return false;
@@ -136,23 +148,57 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar - Categories */}
-          <div className="w-full lg:w-[260px] flex-shrink-0">
+          <div className="w-full lg:w-[280px] flex-shrink-0">
             <div className="sticky top-28 bg-card border border-border/50 shadow-sm rounded-2xl p-6">
               <h3 className="text-lg font-bold text-foreground mb-4 pb-4 border-b border-border/50">Categories</h3>
-              <ul className="space-y-1.5 max-h-[65vh] overflow-y-auto scrollbar-hide pr-2">
-                {filteredCategories.map((cat) => (
-                  <li key={cat}>
+              <ul className="space-y-3 max-h-[65vh] overflow-y-auto scrollbar-hide pr-2">
+                <li>
+                  <button
+                    onClick={() => setActiveCategory('All')}
+                    className={`w-full text-left px-4 py-2.5 rounded-xl text-[14px] transition-all flex items-center justify-between ${
+                      activeCategory === 'All'
+                        ? 'bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/20'
+                        : 'text-foreground/75 hover:bg-muted hover:text-foreground'
+                    }`}
+                  >
+                    All Collections
+                    {activeCategory === 'All' && <Check className="w-4 h-4" />}
+                  </button>
+                </li>
+                
+                {categoriesTree.map((parent) => (
+                  <li key={parent.id} className="pt-2">
                     <button
-                      onClick={() => setActiveCategory(cat)}
-                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[14px] transition-all flex items-center justify-between ${
-                        activeCategory === cat
-                          ? 'bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/20'
-                          : 'text-foreground/75 hover:bg-muted hover:text-foreground'
+                      onClick={() => setActiveCategory(parent.name)}
+                      className={`w-full text-left px-4 py-2 rounded-xl text-[14px] font-bold transition-all flex items-center justify-between ${
+                        activeCategory === parent.name
+                          ? 'text-primary'
+                          : 'text-foreground/80 hover:text-primary'
                       }`}
                     >
-                      {cat}
-                      {activeCategory === cat && <Check className="w-4 h-4" />}
+                      {parent.name.toUpperCase()}
+                      {activeCategory === parent.name && <Check className="w-4 h-4" />}
                     </button>
+                    
+                    {parent.children && parent.children.length > 0 && (
+                      <ul className="mt-2 ml-4 border-l-2 border-border/50 pl-2 space-y-1">
+                        {parent.children.map((child: any) => (
+                          <li key={child.id}>
+                            <button
+                              onClick={() => setActiveCategory(child.name)}
+                              className={`w-full text-left px-3 py-2 rounded-lg text-[13px] transition-all flex items-center justify-between ${
+                                activeCategory === child.name
+                                  ? 'bg-primary/10 text-primary font-semibold'
+                                  : 'text-foreground/70 hover:bg-muted hover:text-foreground'
+                              }`}
+                            >
+                              {child.name}
+                              {activeCategory === child.name && <Check className="w-3 h-3 text-primary" />}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -327,7 +373,7 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
   );
 }
 
-export default function ShopClient(props: { categories: string[], initialProducts: any[] }) {
+export default function ShopClient(props: { categories: any[], initialProducts: any[] }) {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-background pb-20 pt-16 md:pt-20">
