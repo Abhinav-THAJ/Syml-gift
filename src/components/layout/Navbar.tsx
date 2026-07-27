@@ -50,26 +50,28 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
                   
                   {/* Mega Menu */}
                   {categories.length > 0 && (
-                    <div className="absolute top-full -left-4 w-[600px] pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                      <div className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-2xl rounded-2xl p-8 grid grid-cols-2 gap-8">
-                        {categories.map((parent) => (
-                          <div key={parent.id} className="space-y-4">
-                            <Link href={`/categories/${parent.slug}`} className="block text-sm font-bold tracking-widest text-primary hover:underline">
-                              {parent.name.toUpperCase()}
-                            </Link>
-                            {parent.children && parent.children.length > 0 && (
-                              <ul className="space-y-2.5">
-                                {parent.children.map((child: any) => (
-                                  <li key={child.id}>
-                                    <Link href={`/categories/${child.slug}`} className="text-sm text-foreground/70 hover:text-primary transition-colors">
-                                      {child.name}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </div>
-                        ))}
+                    <div className="absolute top-full -left-4 w-[700px] pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                      <div className="bg-background/98 backdrop-blur-3xl border border-border/50 shadow-2xl rounded-2xl p-8 max-h-[75vh] overflow-y-auto scrollbar-hide">
+                        <div className="columns-2 gap-10 space-y-8">
+                          {categories.map((parent) => (
+                            <div key={parent.id} className="break-inside-avoid space-y-3 pb-1">
+                              <Link href={`/categories/${parent.slug}`} className="block text-[13px] font-bold tracking-widest text-primary hover:underline">
+                                {parent.name.toUpperCase()}
+                              </Link>
+                              {parent.children && parent.children.length > 0 && (
+                                <ul className="space-y-2">
+                                  {parent.children.map((child: any) => (
+                                    <li key={child.id}>
+                                      <Link href={`/categories/${child.slug}`} className="text-[14px] text-foreground/75 hover:text-primary transition-colors">
+                                        {child.name}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
