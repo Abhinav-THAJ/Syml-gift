@@ -56,9 +56,11 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
   
   const [priceFilter, setPriceFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   const sortRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+  const categoriesRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -68,6 +70,9 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
       }
       if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
         setShowFilters(false);
+      }
+      if (categoriesRef.current && !categoriesRef.current.contains(event.target as Node)) {
+        setShowMobileCategories(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -148,7 +153,7 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar - Categories */}
-          <div className="w-full lg:w-[280px] flex-shrink-0">
+          <div className="hidden lg:block w-[280px] flex-shrink-0">
             <div className="sticky top-28 bg-card border border-border/50 shadow-sm rounded-2xl p-6">
               <h3 className="text-lg font-bold text-foreground mb-4 pb-4 border-b border-border/50">Categories</h3>
               <ul className="space-y-3 max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
@@ -213,12 +218,75 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
                 Showing {displayProducts.length} results
               </div>
 
-              <div className="flex items-center gap-3 w-full sm:w-auto">
+              <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            {/* Mobile Categories Dropdown */}
+            <div className="relative flex-1 md:flex-none lg:hidden" ref={categoriesRef}>
+              <button 
+                onClick={() => setShowMobileCategories(!showMobileCategories)}
+                className={`w-full flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-5 py-2 rounded-full border text-xs sm:text-sm font-medium transition-colors ${
+                  showMobileCategories || activeCategory !== 'All' ? 'border-primary text-primary bg-primary/5' : 'border-border hover:bg-muted/50'
+                }`}
+              >
+                Category
+                {activeCategory !== 'All' && (
+                  <span className="flex items-center justify-center w-3 h-3 sm:w-4 sm:h-4 bg-primary text-primary-foreground rounded-full text-[9px] sm:text-[10px] ml-1">
+                    1
+                  </span>
+                )}
+              </button>
+              
+              <AnimatePresence>
+                {showMobileCategories && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute left-0 mt-2 min-w-[220px] max-w-[90vw] z-50 bg-card border border-border rounded-xl shadow-lg overflow-y-auto max-h-[60vh] py-1"
+                  >
+                    <button
+                      onClick={() => { setActiveCategory('All'); setShowMobileCategories(false); }}
+                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors hover:bg-muted ${
+                        activeCategory === 'All' ? 'text-primary font-medium bg-primary/5' : 'text-foreground'
+                      }`}
+                    >
+                      All Collections
+                      {activeCategory === 'All' && <Check className="w-4 h-4" />}
+                    </button>
+                    {categoriesTree.map((parent) => (
+                      <div key={parent.id}>
+                        <button
+                          onClick={() => { setActiveCategory(parent.name); setShowMobileCategories(false); }}
+                          className={`w-full text-left px-4 py-2.5 text-sm font-bold flex items-center justify-between transition-colors hover:bg-muted ${
+                            activeCategory === parent.name ? 'text-primary bg-primary/5' : 'text-foreground'
+                          }`}
+                        >
+                          {parent.name.toUpperCase()}
+                          {activeCategory === parent.name && <Check className="w-4 h-4 text-primary" />}
+                        </button>
+                        {parent.children?.map((child: any) => (
+                          <button
+                            key={child.id}
+                            onClick={() => { setActiveCategory(child.name); setShowMobileCategories(false); }}
+                            className={`w-full text-left pl-8 pr-4 py-2 text-sm flex items-center justify-between transition-colors hover:bg-muted ${
+                              activeCategory === child.name ? 'text-primary font-medium bg-primary/5' : 'text-foreground/80'
+                            }`}
+                          >
+                            {child.name}
+                            {activeCategory === child.name && <Check className="w-3 h-3 text-primary" />}
+                          </button>
+                        ))}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* Filters Dropdown */}
             <div className="relative flex-1 md:flex-none" ref={filterRef}>
               <button 
                 onClick={() => setShowFilters(!showFilters)}
-                className={`w-full flex items-center justify-center gap-2 px-5 py-2 rounded-full border text-sm font-medium transition-colors ${
+                className={`w-full flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-5 py-2 rounded-full border text-xs sm:text-sm font-medium transition-colors ${
                   showFilters || priceFilter !== 'all' ? 'border-primary text-primary bg-primary/5' : 'border-border hover:bg-muted/50'
                 }`}
               >
@@ -266,7 +334,7 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
             <div className="relative flex-1 md:flex-none" ref={sortRef}>
               <button 
                 onClick={() => setShowSort(!showSort)}
-                className={`w-full flex items-center justify-center gap-2 px-5 py-2 rounded-full border text-sm font-medium transition-colors ${
+                className={`w-full flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-5 py-2 rounded-full border text-xs sm:text-sm font-medium transition-colors ${
                   showSort || sortBy !== 'default' ? 'border-primary text-primary bg-primary/5' : 'border-border hover:bg-muted/50'
                 }`}
               >
