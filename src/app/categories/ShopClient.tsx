@@ -319,10 +319,11 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
               Clear Filters
             </button>
           </div>
-            </div>
-          </div>
-        </div>
+        )}
+      </div>
     </div>
+  </div>
+</div>
   );
 }
 
