@@ -2,20 +2,22 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, User, ShoppingBag, Menu, X, ArrowRight } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, X, ArrowRight, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppContext } from '@/context/AppContext';
 
 const navLinks = [
   { href: '/', label: 'HOME' },
   { href: '/categories', label: 'COLLECTIONS' },
-  { href: '/about', label: 'ABOUT US' },
+  { href: '/about', label: 'OUR JOURNEY' },
   { href: '/contact', label: 'CONTACT' },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { cartCount, setIsCartOpen, setIsSignInOpen, user, logout } = useAppContext();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -67,12 +69,28 @@ export default function Navbar() {
             <button className="p-2.5 rounded-full text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all" aria-label="Search">
               <Search className="w-5 h-5" />
             </button>
-            <button className="p-2.5 rounded-full text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all" aria-label="Account">
-              <User className="w-5 h-5" />
-            </button>
-            <button className="p-2.5 rounded-full text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all relative group" aria-label="Cart">
+            {user ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-full font-medium text-sm">
+                <User className="w-4 h-4" />
+                {user.name.split(' ')[0]}
+                <button onClick={logout} className="ml-1 p-1 hover:bg-white/50 rounded-full" title="Logout">
+                  <LogOut className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setIsSignInOpen(true)} className="p-2.5 rounded-full text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all" aria-label="Account">
+                <User className="w-5 h-5" />
+              </button>
+            )}
+            <button onClick={() => setIsCartOpen(true)} className="p-2.5 rounded-full text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all relative group" aria-label="Cart">
               <ShoppingBag className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+              {cartCount > 0 ? (
+                <span className="absolute top-0 right-0 w-5 h-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center -translate-y-1/4 translate-x-1/4">
+                  {cartCount}
+                </span>
+              ) : (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+              )}
             </button>
           </div>
           
@@ -86,10 +104,15 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="lg:hidden p-2 text-foreground/80 hover:text-primary transition-colors"
+          className="lg:hidden p-2 text-foreground/80 hover:text-primary transition-colors flex items-center gap-3"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Menu"
         >
+          {cartCount > 0 && !mobileOpen && (
+            <span className="w-5 h-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              {cartCount}
+            </span>
+          )}
           {mobileOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
         </button>
       </div>
@@ -129,17 +152,28 @@ export default function Navbar() {
               </Link>
               
               <div className="flex items-center justify-around pt-6">
-                <button className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1">
+                <button className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1 relative">
                   <Search className="w-5 h-5" />
                   <span className="text-[10px] font-medium tracking-wider">SEARCH</span>
                 </button>
-                <button className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1">
+                <button 
+                  onClick={() => { setIsSignInOpen(true); setMobileOpen(false); }}
+                  className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1"
+                >
                   <User className="w-5 h-5" />
-                  <span className="text-[10px] font-medium tracking-wider">ACCOUNT</span>
+                  <span className="text-[10px] font-medium tracking-wider">{user ? 'PROFILE' : 'ACCOUNT'}</span>
                 </button>
-                <button className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1">
+                <button 
+                  onClick={() => { setIsCartOpen(true); setMobileOpen(false); }}
+                  className="p-3 rounded-full bg-muted/50 text-foreground hover:text-primary transition-colors flex flex-col items-center gap-1 relative"
+                >
                   <ShoppingBag className="w-5 h-5" />
                   <span className="text-[10px] font-medium tracking-wider">CART</span>
+                  {cartCount > 0 && (
+                    <span className="absolute top-0 right-2 w-4 h-4 bg-primary text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                      {cartCount}
+                    </span>
+                  )}
                 </button>
               </div>
             </div>

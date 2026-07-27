@@ -4,53 +4,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-const products = [
-  {
-    id: 1,
-    title: "Valentine's Day Breathing Teddy with Light & Soothing Sound",
-    price: '₹899',
-    originalPrice: '₹1,099',
-    image: '/photos/10.jpeg',
-    badge: 'Sale',
-    badgeColor: 'bg-primary text-primary-foreground',
-  },
-  {
-    id: 2,
-    title: 'Cute Breathing Rabbit Plush Toy with Light & Sound',
-    price: '₹899',
-    originalPrice: '₹999',
-    image: '/photos/11.jpeg',
-    badge: 'Sale',
-    badgeColor: 'bg-primary text-primary-foreground',
-  },
-  {
-    id: 3,
-    title: 'Lollipop Bunny Night Lamp – Cute Mini LED Night Light',
-    price: '₹120',
-    originalPrice: '₹149',
-    image: '/photos/12.jpeg',
-    badge: 'Sold out',
-    badgeColor: 'bg-background text-foreground border border-border',
-  },
-  {
-    id: 4,
-    title: 'Flower Bunny Night Lamp – Cute Mini LED Night Light',
-    price: '₹120',
-    originalPrice: '₹149',
-    image: '/photos/13.jpeg',
-    badge: 'Sold out',
-    badgeColor: 'bg-background text-foreground border border-border',
-  },
-];
+export type FeaturedProduct = {
+  id: string | number;
+  slug?: string;
+  title: string;
+  price: string;
+  originalPrice?: string;
+  image: string;
+  badge?: string;
+  badgeColor?: string;
+};
 
-export default function FeaturedCollections() {
+export default function FeaturedCollections({ products = [] }: { products?: FeaturedProduct[] }) {
+  if (!products || products.length === 0) return null;
+
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex items-end justify-between mb-10">
-          <h2 className="text-2xl font-heading font-semibold text-foreground">
-            Budget Hamper Solutions Perfect for Gifting
-          </h2>
+          <div>
+            <h2 className="text-2xl font-heading font-semibold text-foreground">
+              Budget Hamper Solutions Perfect for Gifting
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Beautifully curated gift hampers handpicked for your special moments
+            </p>
+          </div>
           <Link
             href="/categories"
             className="hidden sm:block text-sm font-medium text-primary hover:underline underline-offset-4"
@@ -60,7 +39,7 @@ export default function FeaturedCollections() {
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map((product, index) => (
+          {products.slice(0, 4).map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
@@ -69,7 +48,7 @@ export default function FeaturedCollections() {
               transition={{ duration: 0.4, delay: index * 0.08 }}
               className="group"
             >
-              <Link href={`/product/${product.id}`}>
+              <Link href={`/product/${product.slug || product.id}`}>
                 {/* Image container */}
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-muted/30 mb-3">
                   <Image

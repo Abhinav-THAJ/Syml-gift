@@ -5,16 +5,15 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const categories = [
-  { title: 'Budget Hampers', image: '/photos/7.jpeg', href: '/categories/budget-hampers' },
-  { title: 'Cute Valentines Gifts', image: '/photos/1.jpeg', href: '/categories/valentines-day-hampers' },
-  { title: 'Birthday Hamper', image: '/photos/3.jpeg', href: '/categories/birthday-hampers' },
-  { title: 'Anniversary Hampers', image: '/photos/6.jpeg', href: '/categories/anniversary-hampers' },
-  { title: 'Valentines Hampers', image: '/photos/9.jpeg', href: '/categories/valentines-day-hampers' },
-  { title: 'Photo Frames', image: '/photos/4.jpeg', href: '/categories/photo-frames' },
-];
+type TrendingCategory = { title: string; image: string; href: string };
 
-export default function TrendingCategories() {
+export default function TrendingCategories({ categories = [] }: { categories?: TrendingCategory[] }) {
+  const validCategories = categories.filter(
+    (c) => c.title.toLowerCase() !== 'uncategorized' && !c.href.includes('uncategorized')
+  );
+
+  if (!validCategories || validCategories.length === 0) return null;
+
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -31,8 +30,8 @@ export default function TrendingCategories() {
         </div>
 
         {/* Horizontal scrollable row of circles */}
-        <div className="flex justify-between gap-4 overflow-x-auto pb-4 scrollbar-hide">
-          {categories.map((cat, index) => (
+        <div className="flex justify-start gap-6 overflow-x-auto pb-4 scrollbar-hide">
+          {validCategories.map((cat, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 15 }}

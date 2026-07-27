@@ -1,9 +1,16 @@
-'use client';
+export function generateStaticParams() {
+  return [
+    { info: 'about' },
+    { info: 'contact' },
+    { info: 'privacy' },
+    { info: 'terms' },
+    { info: 'refund' },
+    { info: 'faq' }
+  ];
+}
 
-import { use } from 'react';
-
-export default function InfoPage({ params }: { params: Promise<{ info: string }> }) {
-  const resolvedParams = use(params);
+export default async function InfoPage({ params }: { params: Promise<{ info: string }> }) {
+  const resolvedParams = await params;
   const title = resolvedParams.info
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))

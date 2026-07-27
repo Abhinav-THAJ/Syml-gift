@@ -1,17 +1,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, Mail, ArrowRight } from 'lucide-react';
+import { getCategories } from '@/lib/woocommerce';
 
-const quickLinks = [
-  { label: 'Valentines Day Hampers', href: '/categories/valentines-day-hampers' },
-  { label: 'Anniversary Hampers', href: '/categories/anniversary-hampers' },
-  { label: 'Photo Frames', href: '/categories/photo-frames' },
-  { label: 'Birthday Hamper', href: '/categories/birthday-hampers' },
-  { label: 'Baby Hampers', href: '/categories/baby-hampers' },
-  { label: 'All Collections', href: '/categories' },
-];
+export default async function Footer() {
+  const wcCategories = await getCategories('per_page=10&hide_empty=false');
+  const quickLinks = wcCategories
+    .filter((c: any) => c.slug !== 'uncategorized' && c.name.toLowerCase() !== 'uncategorized')
+    .map((c: any) => ({
+      label: c.name,
+      href: `/categories/${c.slug}`
+    }));
+  
+  // Add a catch-all link
+  quickLinks.push({ label: 'All Collections', href: '/categories' });
 
-export default function Footer() {
   return (
     <footer className="relative bg-primary text-primary-foreground pt-20 pb-10 overflow-hidden">
       {/* Decorative background circle */}
@@ -59,23 +62,57 @@ export default function Footer() {
             </div>
             {/* Social links */}
             <div className="flex items-center gap-4 pt-2">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-primary transition-all shadow-lg hover:-translate-y-1" aria-label="Instagram">
+              <a href="https://instagram.com/smyl_gifting" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-primary transition-all shadow-lg hover:-translate-y-1" aria-label="Instagram">
                 <InstagramIcon className="w-5 h-5" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-primary transition-all shadow-lg hover:-translate-y-1" aria-label="YouTube">
-                <YoutubeIcon className="w-5 h-5" />
+              <a href="https://wa.me/918129272580" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white hover:text-primary transition-all shadow-lg hover:-translate-y-1" aria-label="WhatsApp">
+                <WhatsAppIcon className="w-5 h-5 fill-current" />
               </a>
             </div>
           </div>
 
-          {/* Spacer */}
-          <div className="hidden lg:block lg:col-span-2"></div>
+          {/* Menu Links */}
+          <div className="md:col-span-4 lg:col-span-2 text-center md:text-left">
+            <h4 className="text-lg font-heading font-semibold mb-6 tracking-wide text-white">Menu</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link href="/" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/categories" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  Collections
+                </Link>
+              </li>
+              <li>
+                <Link href="/build-hamper" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  Build Hamper
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  Our Journey
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-primary-foreground/80 hover:text-white hover:translate-x-1 inline-flex transition-all duration-300 font-medium">
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
 
           {/* Quick links */}
-          <div className="md:col-span-6 lg:col-span-3 text-center md:text-left">
+          <div className="md:col-span-4 lg:col-span-3 text-center md:text-left">
             <h4 className="text-lg font-heading font-semibold mb-6 tracking-wide text-white">Collections</h4>
             <ul className="space-y-4">
-              {quickLinks.map((link) => (
+              {quickLinks.map((link: { label: string; href: string }) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -89,12 +126,12 @@ export default function Footer() {
           </div>
 
           {/* Support */}
-          <div className="md:col-span-6 lg:col-span-3 text-center md:text-left">
+          <div className="md:col-span-4 lg:col-span-3 text-center md:text-left">
             <h4 className="text-lg font-heading font-semibold mb-6 tracking-wide text-white">Get in touch</h4>
             <ul className="space-y-6">
               <li>
                 <a href="tel:+918129272580" className="group flex flex-col md:items-start items-center gap-1">
-                  <span className="text-xs text-primary-foreground/60 uppercase tracking-wider font-bold">Call Us</span>
+                  <span className="text-xs text-primary-foreground/60 uppercase tracking-wider font-bold">Call / WhatsApp</span>
                   <span className="flex items-center gap-2 text-primary-foreground/90 group-hover:text-white transition-colors font-medium">
                     <Phone className="w-4 h-4" /> +91 81292 72580
                   </span>
@@ -120,6 +157,7 @@ export default function Footer() {
             © {new Date().getFullYear()} SMYL Gifting. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-primary-foreground/70 font-medium">
+            <Link href="/faq" className="hover:text-white transition-colors">FAQ</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
             <Link href="/refund" className="hover:text-white transition-colors">Refund Policy</Link>
@@ -140,11 +178,10 @@ function InstagramIcon(props: any) {
   );
 }
 
-function YoutubeIcon(props: any) {
+function WhatsAppIcon(props: any) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/>
-      <path d="m10 15 5-3-5-3z"/>
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
     </svg>
   );
 }

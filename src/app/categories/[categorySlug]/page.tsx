@@ -1,26 +1,47 @@
-'use client';
-
-import { use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Filter, SlidersHorizontal, Heart, ShoppingBag } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { getCategory, getProducts, getCategories } from '@/lib/woocommerce';
 
-// Mock data to simulate database response for dynamic categories
-const allProducts = [
-  { id: 1, title: 'The Royal Anniversary Box', price: '₹4,999', image: '/photos/26.jpeg', height: 'h-[400px]' },
-  { id: 2, title: 'Personalized Executive Set', price: '₹2,499', image: '/photos/27.jpeg', height: 'h-[300px]' },
-  { id: 3, title: 'Blush & Gold Birthday Hamper', price: '₹3,299', image: '/photos/28.jpeg', height: 'h-[450px]' },
-  { id: 4, title: 'Minimalist Gift Box', price: '₹1,499', image: '/photos/29.jpeg', height: 'h-[300px]' },
-];
+export async function generateStaticParams() {
+  const categories = await getCategories('per_page=100');
+  return categories.map((category: any) => ({
+    categorySlug: category.slug || category.id.toString(),
+  }));
+}
 
-export default function CategoryPage({ params }: { params: Promise<{ categorySlug: string }> }) {
-  const resolvedParams = use(params);
-  // Format slug to readable title (e.g., "mothers-day-hampers" -> "Mother's Day Hampers")
-  const title = resolvedParams.categorySlug
+export default async function CategoryPage({ params }: { params: Promise<{ categorySlug: string }> }) {
+  const resolvedParams = await params;
+  const { categorySlug } = resolvedParams;
+  const category = await getCategory(categorySlug);
+
+  let products = [];
+  if (category) {
+    products = await getProducts(`category=${category.id}&per_page=100`);
+  }
+
+  if (products.length === 0) {
+    const allProducts = await getProducts('per_page=100');
+    const slugClean = categorySlug.replace(/-/g, ' ').toLowerCase();
+    products = allProducts.filter((p: any) => {
+      const pCats = p.categories?.map((c: any) => c.name.toLowerCase()).join(' ') || '';
+      const pName = (p.name || '').toLowerCase();
+      return pCats.includes(slugClean) || pName.includes(slugClean) || (slugClean.includes('onam') && (pCats.includes('onam') || pName.includes('onam')));
+    });
+  }
+
+  const title = category?.name || categorySlug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+
+  const mappedProducts = products.map((p: any) => ({
+    id: p.id,
+    title: p.name,
+    price: `₹${p.price}`,
+    image: p.images?.[0]?.src || '/photos/default-product.jpeg',
+    slug: p.slug
+  }));
 
   return (
     <div className="min-h-screen bg-background pb-20" style={{ paddingTop: '120px' }}>
@@ -37,7 +58,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categorySlu
 
         {/* Toolbar */}
         <div className="flex justify-between items-center mb-10 pb-6 border-b border-border">
-          <p className="text-muted-foreground">{allProducts.length} Products Found</p>
+          <p className="text-muted-foreground">{mappedProducts.length} Products Found</p>
           <div className="flex items-center gap-3">
             <button className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-border text-sm font-medium hover:bg-muted/50 transition-colors">
               <Filter className="w-4 h-4" />
@@ -52,16 +73,14 @@ export default function CategoryPage({ params }: { params: Promise<{ categorySlu
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {allProducts.map((product, index) => (
-            <motion.div
+          {mappedProducts.map((product: any, index: number) => (
+            <div
               key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="relative group bg-card border border-border/50 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col"
+              className="relative group bg-card border border-border/50 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col animate-in fade-in slide-in-from-bottom-5"
+              style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'both' }}
             >
               <div className="relative w-full aspect-[4/5] overflow-hidden bg-muted">
-                <Link href={`/product/${product.id}`} className="absolute inset-0 z-0">
+                <Link href={`/product/${product.slug || product.id}`} className="absolute inset-0 z-0">
                   <Image
                     src={product.image}
                     alt={product.title}
@@ -75,7 +94,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categorySlu
                 </button>
               </div>
               <div className="p-5 flex flex-col flex-1">
-                <Link href={`/product/${product.id}`} className="block mb-2">
+                <Link href={`/product/${product.slug || product.id}`} className="block mb-2">
                   <h3 className="font-heading font-semibold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {product.title}
                   </h3>
@@ -87,7 +106,7 @@ export default function CategoryPage({ params }: { params: Promise<{ categorySlu
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

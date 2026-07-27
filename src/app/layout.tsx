@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Archivo, Proza_Libre } from "next/font/google";
+import { Archivo, Proza_Libre, Caveat, Great_Vibes } from "next/font/google";
 import "./globals.css";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import Preloader from "@/components/layout/Preloader";
+import { AppProvider } from '@/context/AppContext';
+import CartDrawer from '@/components/layout/CartDrawer';
+import SignInModal from '@/components/layout/SignInModal';
 
 const prozaLibre = Proza_Libre({ 
   weight: ['400', '500', '600', '700', '800'],
@@ -16,6 +19,17 @@ const prozaLibre = Proza_Libre({
 const archivo = Archivo({ 
   subsets: ["latin"],
   variable: '--font-archivo',
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: '--font-caveat',
+});
+
+const greatVibes = Great_Vibes({
+  weight: '400',
+  subsets: ["latin"],
+  variable: '--font-great-vibes',
 });
 
 export const metadata: Metadata = {
@@ -29,20 +43,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${prozaLibre.variable} ${archivo.variable}`}>
-      <body className="antialiased font-sans flex flex-col min-h-screen">
-        {/* Preloader — shown on every page load */}
-        <Preloader />
-        {/* Fixed announcement bar + navbar */}
-        <div className="fixed top-0 left-0 right-0 z-50">
+    <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${prozaLibre.variable} ${caveat.variable} ${greatVibes.variable}`}>
+      <body className="antialiased min-h-screen flex flex-col font-sans">
+        <AppProvider>
+          <Preloader />
           <AnnouncementBar />
-          <Navbar />
-        </div>
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
-        <WhatsAppButton />
+          <div className="sticky top-0 z-50">
+            <Navbar />
+          </div>
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <CartDrawer />
+          <SignInModal />
+          <WhatsAppButton />
+        </AppProvider>
       </body>
     </html>
   );
