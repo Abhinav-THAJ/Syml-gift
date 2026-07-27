@@ -134,26 +134,40 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
           </p>
         </div>
 
-        {/* Toolbar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 pb-6 border-b border-border relative z-10">
-          {/* Categories Scrollable Row */}
-          <div className="flex overflow-x-auto w-full md:w-auto pb-2 md:pb-0 gap-2 scrollbar-hide">
-            {filteredCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeCategory === cat 
-                    ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20' 
-                    : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar - Categories */}
+          <div className="w-full lg:w-[260px] flex-shrink-0">
+            <div className="sticky top-28 bg-card border border-border/50 shadow-sm rounded-2xl p-6">
+              <h3 className="text-lg font-bold text-foreground mb-4 pb-4 border-b border-border/50">Categories</h3>
+              <ul className="space-y-1.5 max-h-[65vh] overflow-y-auto scrollbar-hide pr-2">
+                {filteredCategories.map((cat) => (
+                  <li key={cat}>
+                    <button
+                      onClick={() => setActiveCategory(cat)}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl text-[14px] transition-all flex items-center justify-between ${
+                        activeCategory === cat
+                          ? 'bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/20'
+                          : 'text-foreground/75 hover:bg-muted hover:text-foreground'
+                      }`}
+                    >
+                      {cat}
+                      {activeCategory === cat && <Check className="w-4 h-4" />}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            {/* Toolbar */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 pb-6 border-b border-border relative z-10">
+              <div className="text-sm text-muted-foreground font-medium">
+                Showing {displayProducts.length} results
+              </div>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto">
             {/* Filters Dropdown */}
             <div className="relative flex-1 md:flex-none" ref={filterRef}>
               <button 
@@ -305,8 +319,9 @@ function ShopClientContent({ categories: initialCategories, initialProducts }: {
               Clear Filters
             </button>
           </div>
-        )}
-      </div>
+            </div>
+          </div>
+        </div>
     </div>
   );
 }
