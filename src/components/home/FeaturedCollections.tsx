@@ -38,7 +38,7 @@ export default function FeaturedCollections({ products = [] }: { products?: Feat
           </Link>
         </div>
 
-        <div className="flex overflow-x-auto gap-4 md:gap-6 pb-6 snap-x custom-scrollbar">
+        <div className="flex overflow-x-auto gap-4 md:gap-6 pb-6 snap-x scrollbar-hide">
           {products.map((product, index) => (
             <motion.div
               key={product.id}
