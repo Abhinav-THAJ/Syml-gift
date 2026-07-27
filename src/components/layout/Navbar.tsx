@@ -14,7 +14,7 @@ const navLinks = [
   { href: '/contact', label: 'CONTACT' },
 ];
 
-export default function Navbar() {
+export default function Navbar({ categories = [] }: { categories?: any[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { cartCount, setIsCartOpen, setIsSignInOpen, user, logout } = useAppContext();
@@ -35,18 +35,60 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         
-        {/* Left nav links - desktop */}
         <nav className="hidden lg:flex items-center gap-10 flex-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="relative text-sm font-semibold tracking-[0.15em] text-foreground/80 hover:text-primary transition-colors group py-2"
-            >
-              {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-out group-hover:w-full" />
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            if (link.label === 'COLLECTIONS') {
+              return (
+                <div key={link.href} className="group relative py-2">
+                  <Link
+                    href={link.href}
+                    className="relative text-sm font-semibold tracking-[0.15em] text-foreground/80 hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-out group-hover:w-full" />
+                  </Link>
+                  
+                  {/* Mega Menu */}
+                  {categories.length > 0 && (
+                    <div className="absolute top-full -left-4 w-[600px] pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                      <div className="bg-background/95 backdrop-blur-xl border border-border/50 shadow-2xl rounded-2xl p-8 grid grid-cols-2 gap-8">
+                        {categories.map((parent) => (
+                          <div key={parent.id} className="space-y-4">
+                            <Link href={`/categories/${parent.slug}`} className="block text-sm font-bold tracking-widest text-primary hover:underline">
+                              {parent.name.toUpperCase()}
+                            </Link>
+                            {parent.children && parent.children.length > 0 && (
+                              <ul className="space-y-2.5">
+                                {parent.children.map((child: any) => (
+                                  <li key={child.id}>
+                                    <Link href={`/categories/${child.slug}`} className="text-sm text-foreground/70 hover:text-primary transition-colors">
+                                      {child.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
+            
+            return (
+              <div key={link.href} className="group relative py-2">
+                <Link
+                  href={link.href}
+                  className="relative text-sm font-semibold tracking-[0.15em] text-foreground/80 hover:text-primary transition-colors"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 ease-out group-hover:w-full" />
+                </Link>
+              </div>
+            );
+          })}
         </nav>
 
         {/* Center logo */}
@@ -128,17 +170,57 @@ export default function Navbar() {
             className="lg:hidden bg-background/95 backdrop-blur-xl border-t border-white/20 overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
-                >
-                  {link.label}
-                  <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                if (link.label === 'COLLECTIONS' && categories.length > 0) {
+                  return (
+                    <div key={link.href} className="flex flex-col gap-4">
+                      <Link
+                        href={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
+                      >
+                        {link.label}
+                        <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                      </Link>
+                      <div className="pl-4 flex flex-col gap-4 border-l border-border/50">
+                        {categories.map(parent => (
+                          <div key={parent.id} className="flex flex-col gap-2">
+                            <Link 
+                              href={`/categories/${parent.slug}`}
+                              onClick={() => setMobileOpen(false)}
+                              className="text-sm font-bold text-primary"
+                            >
+                              {parent.name}
+                            </Link>
+                            {parent.children?.map((child: any) => (
+                              <Link 
+                                key={child.id}
+                                href={`/categories/${child.slug}`}
+                                onClick={() => setMobileOpen(false)}
+                                className="text-sm text-foreground/70"
+                              >
+                                {child.name}
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+                
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
+                  >
+                    {link.label}
+                    <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                  </Link>
+                );
+              })}
               
               <div className="h-px w-full bg-border/50 my-2" />
               
