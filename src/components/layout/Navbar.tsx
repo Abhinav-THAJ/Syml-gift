@@ -215,57 +215,17 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
             className="lg:hidden bg-background/95 backdrop-blur-xl border-t border-white/20 overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-6">
-              {navLinks.map((link) => {
-                if (link.label === 'COLLECTIONS' && categories.length > 0) {
-                  return (
-                    <div key={link.href} className="flex flex-col gap-4">
-                      <Link
-                        href={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
-                      >
-                        {link.label}
-                        <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
-                      </Link>
-                      <div className="pl-4 flex flex-col gap-4 border-l border-border/50">
-                        {categories.map(parent => (
-                          <div key={parent.id} className="flex flex-col gap-2">
-                            <Link 
-                              href={`/categories/${parent.slug}`}
-                              onClick={() => setMobileOpen(false)}
-                              className="text-sm font-bold text-primary"
-                            >
-                              {parent.name}
-                            </Link>
-                            {parent.children?.map((child: any) => (
-                              <Link 
-                                key={child.id}
-                                href={`/categories/${child.slug}`}
-                                onClick={() => setMobileOpen(false)}
-                                className="text-sm text-foreground/70"
-                              >
-                                {child.name}
-                              </Link>
-                            ))}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-                
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
-                  >
-                    {link.label}
-                    <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
-                  </Link>
-                );
-              })}
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-lg font-heading font-semibold text-foreground hover:text-primary transition-colors flex items-center justify-between group"
+                >
+                  {link.label}
+                  <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                </Link>
+              ))}
               
               <div className="h-px w-full bg-border/50 my-2" />
               
