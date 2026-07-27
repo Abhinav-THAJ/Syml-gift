@@ -17,6 +17,7 @@ const navLinks = [
 export default function Navbar({ categories = [] }: { categories?: any[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<any>(null);
   const { cartCount, setIsCartOpen, setIsSignInOpen, user, logout } = useAppContext();
 
   useEffect(() => {
@@ -50,27 +51,69 @@ export default function Navbar({ categories = [] }: { categories?: any[] }) {
                   
                   {/* Mega Menu */}
                   {categories.length > 0 && (
-                    <div className="absolute top-full -left-4 w-[700px] pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                      <div className="bg-background/98 backdrop-blur-3xl border border-border/50 shadow-2xl rounded-2xl p-8 max-h-[75vh] overflow-y-auto scrollbar-hide">
-                        <div className="columns-2 gap-10 space-y-8">
-                          {categories.map((parent) => (
-                            <div key={parent.id} className="break-inside-avoid space-y-3 pb-1">
-                              <Link href={`/categories/${parent.slug}`} className="block text-[13px] font-bold tracking-widest text-primary hover:underline">
-                                {parent.name.toUpperCase()}
-                              </Link>
-                              {parent.children && parent.children.length > 0 && (
-                                <ul className="space-y-2">
-                                  {parent.children.map((child: any) => (
-                                    <li key={child.id}>
-                                      <Link href={`/categories/${child.slug}`} className="text-[14px] text-foreground/75 hover:text-primary transition-colors">
-                                        {child.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                          ))}
+                    <div className="absolute top-full -left-4 w-[800px] pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                      <div className="bg-background/98 backdrop-blur-3xl border border-border/50 shadow-2xl rounded-2xl flex min-h-[380px] overflow-hidden">
+                        {/* Left Pane: Main Categories */}
+                        <div className="w-1/3 bg-muted/30 p-4 border-r border-border/50">
+                          <ul className="space-y-1 max-h-[60vh] overflow-y-auto scrollbar-hide">
+                            {categories.map((parent) => (
+                              <li key={parent.id}>
+                                <Link 
+                                  href={`/categories/${parent.slug}`}
+                                  onMouseEnter={() => setActiveCategory(parent)}
+                                  className={`block px-3 py-2 rounded-xl text-[11px] font-bold tracking-widest transition-all ${
+                                    (activeCategory?.id === parent.id || (!activeCategory && categories[0]?.id === parent.id))
+                                      ? 'bg-background text-primary shadow-sm border border-border/50'
+                                      : 'text-foreground/75 hover:bg-background/50 hover:text-primary'
+                                  }`}
+                                >
+                                  {parent.name.toUpperCase()}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        {/* Right Pane: Sub Categories */}
+                        <div className="w-2/3 p-8 bg-background">
+                          {(() => {
+                            const displayCat = activeCategory || categories[0];
+                            if (!displayCat) return null;
+                            
+                            return (
+                              <div key={displayCat.id} className="animate-in fade-in slide-in-from-right-4 duration-300">
+                                <h3 className="text-lg font-bold text-foreground mb-6 pb-4 border-b border-border/50 flex items-center justify-between">
+                                  {displayCat.name}
+                                  <Link href={`/categories/${displayCat.slug}`} className="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+                                    Shop All <ArrowRight className="w-3 h-3" />
+                                  </Link>
+                                </h3>
+                                
+                                {displayCat.children && displayCat.children.length > 0 ? (
+                                  <div className="columns-2 gap-6 space-y-4">
+                                    {displayCat.children.map((child: any) => (
+                                      <div key={child.id} className="break-inside-avoid pb-1">
+                                        <Link 
+                                          href={`/categories/${child.slug}`} 
+                                          className="group flex items-center gap-2 text-[14px] text-foreground/75 hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/5 -ml-2"
+                                        >
+                                          <span className="w-1.5 h-1.5 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
+                                          {child.name}
+                                        </Link>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-col items-center justify-center h-[200px] text-muted-foreground">
+                                    <p className="text-sm">Explore our curated collection of {displayCat.name}</p>
+                                    <Link href={`/categories/${displayCat.slug}`} className="mt-6 px-8 py-3 bg-primary text-primary-foreground rounded-full text-xs font-semibold hover:opacity-90 transition-opacity">
+                                      View Collection
+                                    </Link>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>
