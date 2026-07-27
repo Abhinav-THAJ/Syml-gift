@@ -46,7 +46,7 @@ export default function FeaturedCollections({ products = [] }: { products?: Feat
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.5) }}
-              className="group min-w-[240px] md:min-w-[280px] lg:min-w-[300px] flex-shrink-0 snap-start"
+              className="group w-[160px] min-w-[160px] sm:w-[240px] sm:min-w-[240px] md:w-[280px] md:min-w-[280px] lg:w-[300px] lg:min-w-[300px] flex-shrink-0 snap-start"
             >
               <Link href={`/product/${product.slug || product.id}`}>
                 {/* Image container */}
