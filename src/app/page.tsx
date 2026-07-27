@@ -1,6 +1,5 @@
 import Hero from '@/components/home/Hero';
 import FestivalSection from '@/components/home/FestivalSection';
-import TrendingCategories from '@/components/home/TrendingCategories';
 import FeaturedCollections from '@/components/home/FeaturedCollections';
 import Features from '@/components/home/Features';
 import FAQSection from '@/components/home/FAQSection';
@@ -15,12 +14,6 @@ export default async function Home() {
     getCategories('per_page=100&hide_empty=false'),
     getProducts('per_page=100'),
   ]);
-
-  const trendingCategories = wcCategories.map((c: any) => ({
-    title: c.name,
-    image: c.image?.src || '/photos/default-category.jpeg',
-    href: `/categories/${c.slug || c.id}`
-  }));
 
   const featuredProducts = wcProducts.map((p: any) => ({
     id: p.id,
@@ -37,7 +30,6 @@ export default async function Home() {
     <>
       <Hero />
       <FestivalSection />
-      <TrendingCategories categories={trendingCategories} />
       <FeaturedCollections products={featuredProducts.slice(0, 4)} />
       <Features />
       <FAQSection />
