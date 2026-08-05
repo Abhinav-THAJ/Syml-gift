@@ -3,7 +3,16 @@
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 
-const testimonials = [
+interface Testimonial {
+  id: number;
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+  initial: string;
+}
+
+const defaultTestimonials: Testimonial[] = [
   {
     id: 1,
     name: 'Priya Sharma',
@@ -30,19 +39,27 @@ const testimonials = [
   },
 ];
 
-export default function Testimonials() {
+interface TestimonialsProps {
+  title?: string;
+  subtitle?: string;
+  testimonials?: Testimonial[];
+}
+
+export default function Testimonials({ title, subtitle, testimonials = defaultTestimonials }: TestimonialsProps) {
+  const displayTestimonials = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+  
   return (
     <section className="py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 space-y-3">
           <h2 className="text-3xl font-heading font-semibold text-foreground">
-            Let customers speak for us
+            {title || "Let customers speak for us"}
           </h2>
-          <p className="text-sm text-muted-foreground">from {testimonials.length} reviews</p>
+          <p className="text-sm text-muted-foreground">{subtitle || `from ${displayTestimonials.length} reviews`}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
+          {displayTestimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.id}
               initial={{ opacity: 0, y: 20 }}

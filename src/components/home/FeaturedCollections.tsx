@@ -15,7 +15,15 @@ export type FeaturedProduct = {
   badgeColor?: string;
 };
 
-export default function FeaturedCollections({ products = [] }: { products?: FeaturedProduct[] }) {
+export default function FeaturedCollections({ 
+  products = [],
+  title,
+  subtitle
+}: { 
+  products?: FeaturedProduct[],
+  title?: string,
+  subtitle?: string
+}) {
   if (!products || products.length === 0) return null;
 
   return (
@@ -24,10 +32,10 @@ export default function FeaturedCollections({ products = [] }: { products?: Feat
         <div className="flex items-end justify-between mb-10">
           <div>
             <h2 className="text-2xl font-heading font-semibold text-foreground">
-              Budget Hamper Solutions Perfect for Gifting
+              {title || "Budget Hamper Solutions Perfect for Gifting"}
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Beautifully curated gift hampers handpicked for your special moments
+              {subtitle || "Beautifully curated gift hampers handpicked for your special moments"}
             </p>
           </div>
           <Link

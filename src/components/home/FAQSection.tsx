@@ -35,7 +35,7 @@ const faqs: FAQItem[] = [
 
 const categories = ['All', 'Custom Orders', 'Shipping & Delivery', 'Returns & Policies'];
 
-export default function FAQSection() {
+export default function FAQSection({ title, description }: { title?: string, description?: string }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,10 +60,10 @@ export default function FAQSection() {
             <HelpCircle className="w-4 h-4" /> Got Questions? We&apos;ve Got Answers.
           </div>
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-foreground">
-            Got Questions? We&apos;ve Got Answers.
+            {title || "Got Questions? We've Got Answers."}
           </h2>
           <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
-            Everything you need to know about our handcrafted hampers, customization options, and delivery.
+            {description || "Everything you need to know about our handcrafted hampers, customization options, and delivery."}
           </p>
         </div>
 

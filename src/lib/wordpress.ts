@@ -3,7 +3,7 @@ export const WP_URL = process.env.WC_URL || 'https://paleturquoise-guanaco-73559
 
 export async function getPageData(slug: string) {
   try {
-    const url = new URL(`${WP_URL}/wp-json/wp/v2/pages?slug=${slug}`);
+    const url = new URL(`${WP_URL}/wp-json/wp/v2/pages?slug=${slug}&acf_format=standard`);
     
     const response = await fetch(url.toString(), {
       next: { revalidate: 60 } // Revalidate every 60 seconds

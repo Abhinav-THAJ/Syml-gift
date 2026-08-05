@@ -4,7 +4,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-export default function FestivalSection() {
+interface FestivalSectionProps {
+  badge?: string;
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  buttonLink?: string;
+  image?: string;
+}
+
+export default function FestivalSection({
+  badge,
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  image
+}: FestivalSectionProps) {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-[#fff8ea] to-[#fff1d6] relative overflow-hidden">
       {/* Decorative floral hints */}
@@ -24,20 +40,18 @@ export default function FestivalSection() {
                 transition={{ duration: 0.7 }}
               >
                 <span className="inline-block px-4 py-1.5 sm:px-5 sm:py-2 rounded-full bg-amber-100 text-amber-800 text-xs sm:text-sm font-bold tracking-widest uppercase mb-4 sm:mb-6 shadow-sm border border-amber-200">
-                  Festival Special
+                  {badge || "Festival Special"}
                 </span>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-semibold text-[#831843] mb-4 sm:mb-6 leading-tight">
-                  Celebrate Onam <br className="hidden md:block" />in Style
-                </h2>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-semibold text-[#831843] mb-4 sm:mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: title || "Celebrate Onam <br class='hidden md:block' />in Style" }} />
                 <p className="text-[#9d174d] text-base sm:text-lg mb-8 md:mb-10 leading-relaxed font-medium">
-                  The harvest festival is almost here! Bring joy to your loved ones with our exclusive Onam Hampers, featuring traditional Kerala delicacies, beautiful brass diyas, and authentic Kasavu elegance, all packed with love.
+                  {description || "The harvest festival is almost here! Bring joy to your loved ones with our exclusive Onam Hampers, featuring traditional Kerala delicacies, beautiful brass diyas, and authentic Kasavu elegance, all packed with love."}
                 </p>
                 
                 <Link
-                  href="/categories?category=Onam+Hamper"
+                  href={buttonLink || "/categories?category=Onam+Hamper"}
                   className="inline-flex items-center justify-center w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-10 rounded-full bg-[#831843] text-white font-semibold text-base sm:text-lg transition-all hover:bg-[#9d174d] hover:scale-105 shadow-xl shadow-[#831843]/20"
                 >
-                  Customize Your Onam Hamper
+                  {buttonText || "Customize Your Onam Hamper"}
                 </Link>
               </motion.div>
             </div>
@@ -52,8 +66,8 @@ export default function FestivalSection() {
                 className="absolute inset-0"
               >
                 <Image
-                  src="/photos/onam_hamper.png"
-                  alt="Exclusive Onam Gift Hamper"
+                  src={image || "/photos/onam_hamper.png"}
+                  alt={title ? title.replace(/<[^>]*>?/gm, '') : "Exclusive Onam Gift Hamper"}
                   fill
                   className="object-cover object-center"
                 />

@@ -4,14 +4,29 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-export default function Features() {
+interface FeaturesProps {
+  customise_image?: string;
+  customise_title?: string;
+  customise_description?: string;
+  customise_button_text?: string;
+  customise_button_link?: string;
+  stats_title?: string;
+  stats_description?: string;
+  wish_image?: string;
+  wish_title?: string;
+  wish_description?: string;
+  wish_button_text?: string;
+  wish_button_link?: string;
+}
+
+export default function Features(props: FeaturesProps) {
   return (
     <>
       {/* "Customise Your Hamper" Section - full width with image bg */}
       <section className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
         <Image
-          src="/photos/5.jpeg"
-          alt="Customise Your Hamper"
+          src={props.customise_image || "/photos/5.jpeg"}
+          alt={props.customise_title || "Customise Your Hamper"}
           fill
           className="object-cover"
         />
@@ -28,16 +43,16 @@ export default function Features() {
             className="bg-background/95 backdrop-blur-sm rounded-2xl p-10 md:p-14 text-center max-w-2xl w-full shadow-2xl"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mb-4">
-              Customise Your Hamper
+              {props.customise_title || "Customise Your Hamper"}
             </h2>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Make your gifting memorable with a personalised hamper. Choose your theme, budget and items – our team will curate and pack it beautifully for you.
+              {props.customise_description || "Make your gifting memorable with a personalised hamper. Choose your theme, budget and items – our team will curate and pack it beautifully for you."}
             </p>
             <Link
-              href="/build-hamper"
+              href={props.customise_button_link || "/build-hamper"}
               className="inline-flex items-center h-12 px-10 rounded-full bg-primary text-primary-foreground font-medium text-sm transition-all hover:opacity-90 shadow-lg shadow-primary/25"
             >
-              Start Now
+              {props.customise_button_text || "Start Now"}
             </Link>
           </motion.div>
         </div>
@@ -47,7 +62,9 @@ export default function Features() {
       <section className="bg-primary py-16 text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
-            {['C', 'H', 'O', 'S', 'E', 'N', '✓'].map((letter, i) => (
+            {(props.stats_title ? props.stats_title.split('') : ['C', 'H', 'O', 'S', 'E', 'N', '✓']).map((letter, i) => {
+              if (letter === ' ') return <div key={i} className="w-4" />;
+              return (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, rotateX: -90 }}
@@ -58,10 +75,10 @@ export default function Features() {
               >
                 {letter}
               </motion.div>
-            ))}
+            )})}
           </div>
           <p className="text-primary-foreground/80 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mt-6">
-            Turn your favorite memories into a physical celebration. Personalized, hand-picked, and delivered with care.
+            {props.stats_description || "Turn your favorite memories into a physical celebration. Personalized, hand-picked, and delivered with care."}
           </p>
           <div className="flex items-center justify-center gap-12 mt-10 flex-wrap">
             {[
@@ -85,8 +102,8 @@ export default function Features() {
             {/* Image */}
             <div className="relative h-[340px] md:h-[420px]">
               <Image
-                src="/photos/6.jpeg"
-                alt="Make Their Wish Come True"
+                src={props.wish_image || "/photos/6.jpeg"}
+                alt={props.wish_title || "Make Their Wish Come True"}
                 fill
                 className="object-cover"
               />
@@ -94,16 +111,16 @@ export default function Features() {
             {/* Text */}
             <div className="flex flex-col justify-center p-10 md:p-14 bg-background">
               <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mb-4 leading-tight">
-                Make Their Wish Come True
+                {props.wish_title || "Make Their Wish Come True"}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                From fun surprises to luxury indulgences, find the perfect birthday hamper that matches their personality and celebrates their special day.
+                {props.wish_description || "From fun surprises to luxury indulgences, find the perfect birthday hamper that matches their personality and celebrates their special day."}
               </p>
               <Link
-                href="/categories/birthday-hampers"
+                href={props.wish_button_link || "/categories/birthday-hampers"}
                 className="self-start h-12 px-8 rounded-full bg-primary text-primary-foreground font-medium text-sm transition-all hover:opacity-90 shadow-md shadow-primary/20 flex items-center"
               >
-                Shop Now
+                {props.wish_button_text || "Shop Now"}
               </Link>
             </div>
           </div>
